@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
+using System.Diagnostics;
 
 namespace TextEditorMVVM.Models
 {
@@ -9,27 +11,32 @@ namespace TextEditorMVVM.Models
         public string FilePath { get; set; }
 
         public string IsReadOnly { get; set; }
+        Stream Stream { get; set; }
+
         //public Encoding Encoding { get; set; }
         //private readonly Encoding _defaultEncoding = CodePagesEncodingProvider.Instance.GetEncoding(1251);
 
         public bool IsExist(string filePath)
         {
-            return File.Exists(filePath);
+            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), filePath + ".txt");
+            return File.Exists(fileName);
         }
 
         public string GetText(string filePath)
         {
-            return File.ReadAllText(filePath);
+            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), filePath + ".txt");
+            return File.ReadAllText(fileName);
         }
         public string GetText(string filePath, Encoding encoding)
         {
             string text = File.ReadAllText(filePath, encoding);
             return text;
         }
-
         public void SaveText(string text, string filePath)
         {
-            File.WriteAllText(filePath, text);
+            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), filePath + ".txt");
+            File.WriteAllText(fileName, text);
+            //File.WriteAllText(fileName, text);
         }
         public void SaveText(string text, string filePath, Encoding encoding)
         {

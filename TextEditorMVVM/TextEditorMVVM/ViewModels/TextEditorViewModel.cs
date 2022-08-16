@@ -91,7 +91,6 @@ namespace TextEditorMVVM.ViewModels
             {
                 Debug.WriteLine(FilePath + " not exist");
             }
-
         }
         public void CloseFile()
         {
@@ -113,7 +112,8 @@ namespace TextEditorMVVM.ViewModels
             }
             else
             {
-                Debug.WriteLine(FilePath + " error");
+                fileManager.SaveText(Text, FilePath);
+                Debug.WriteLine(FilePath + " owerwritten");
             }
         }
 
