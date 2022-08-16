@@ -7,6 +7,8 @@ namespace TextEditorMVVM.Models
     {
         public string Text { get; set; }
         public string FilePath { get; set; }
+
+        public string IsReadOnly { get; set; }
         //public Encoding Encoding { get; set; }
         //private readonly Encoding _defaultEncoding = CodePagesEncodingProvider.Instance.GetEncoding(1251);
 

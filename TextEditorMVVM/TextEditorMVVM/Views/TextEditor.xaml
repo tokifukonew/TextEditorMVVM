@@ -15,11 +15,11 @@
                 <Label Text="Редактирование: " VerticalOptions="Center"/>
                 <Switch>
                     <Switch.Behaviors>
-                        <local:SwitchBehavior Command="{Binding ExecuteSwitchCommand}"/>
+                        <local:SwitchBehavior Command="{Binding SwitchCommand}"/>
                     </Switch.Behaviors>
                 </Switch>
             </StackLayout>
-            <Editor Placeholder="Откройте файл..." HeightRequest="200"/>
+            <Editor x:Name="editor" IsReadOnly="{Binding IsReadOnly}" Placeholder="Откройте файл..." HeightRequest="200"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

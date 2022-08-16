@@ -72,7 +72,9 @@ namespace TextEditorMVVM.Views
             #endregion
             //Debug.WriteLine("Debug!");
             InitializeComponent();
-            this.BindingContext = new TextEditorViewModel{};
+            this.BindingContext = new TextEditorViewModel{
+                IsReadOnly = "True"
+            };
         }
 
         private void EditorTextChanged(object sender, TextChangedEventArgs e)

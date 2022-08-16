@@ -15,7 +15,7 @@ namespace TextEditorMVVM.ViewModels
         public ICommand OpenFileCommand { get; }
         public ICommand CloseFileCommand { get; }
         public ICommand SaveFileCommand { get; }
-        public ICommand ExecuteSwitchCommand { get; }
+        public ICommand SwitchCommand { get; }
 
         private FileManager fileManager;
 
@@ -25,12 +25,32 @@ namespace TextEditorMVVM.ViewModels
             OpenFileCommand = new Command(OpenFile);
             CloseFileCommand = new Command(CloseFile);
             SaveFileCommand = new Command(SaveFile);
-            ExecuteSwitchCommand = new Command(ExecuteSwitch);
+            SwitchCommand = new Command(Switch);
         }
 
-        private void ExecuteSwitch()
+        public string IsReadOnly
         {
-            Debug.WriteLine("ExecuteSwitch");
+            get { return fileManager.IsReadOnly; }
+            set
+            {
+                if (fileManager.IsReadOnly != value)
+                {
+                    fileManager.IsReadOnly = value;
+                    OnPropertyChanged("IsReadOnly");
+                }
+            }
+        }
+
+        private void Switch()
+        {
+            if (IsReadOnly == "False")
+            {
+                IsReadOnly = "True";
+            }
+            else
+            {
+                IsReadOnly = "False";
+            }
         }
 
         public void OpenFile()
@@ -45,8 +65,6 @@ namespace TextEditorMVVM.ViewModels
         {
             Debug.WriteLine("Save File");
         }
-
-        public ICommand MySwitchCommand { get; set; }
 
         protected void OnPropertyChanged (string propName)
         {
