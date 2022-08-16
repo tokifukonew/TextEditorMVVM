@@ -5,6 +5,7 @@ using System.Windows.Input;
 using TextEditorMVVM.Models;
 using TextEditorMVVM.Classes;
 using Xamarin.Forms;
+using System.Text;
 
 namespace TextEditorMVVM.ViewModels
 {
@@ -41,6 +42,32 @@ namespace TextEditorMVVM.ViewModels
             }
         }
 
+        public string Text
+        {
+            get { return fileManager.Text; }
+            set
+            {
+                if (fileManager.Text != value)
+                {
+                    fileManager.Text = value;
+                    OnPropertyChanged("Text");
+                    Debug.WriteLine("Change Text...");
+                }
+            }
+        }
+        public string FilePath
+        {
+            get { return fileManager.FilePath; }
+            set
+            {
+                if (fileManager.FilePath != value)
+                {
+                    fileManager.FilePath = value;
+                    OnPropertyChanged("FilePath");
+                }
+            }
+        }
+
         private void Switch()
         {
             if (IsReadOnly == "False")
@@ -55,15 +82,39 @@ namespace TextEditorMVVM.ViewModels
 
         public void OpenFile()
         {
-            Debug.WriteLine("Open File");
+            if (fileManager.IsExist(FilePath))
+            {
+                Text = fileManager.GetText(FilePath);
+                OnPropertyChanged("Text");
+            }
+            else
+            {
+                Debug.WriteLine(FilePath + " not exist");
+            }
+
         }
         public void CloseFile()
         {
-            Debug.WriteLine("Close File");
+            if (Text != null || Text != "")
+            {
+                Text = null;
+            }
+            else
+            {
+                Debug.WriteLine("Close File. Incorrect");
+            }
         }
         public void SaveFile()
         {
-            Debug.WriteLine("Save File");
+            if (!fileManager.IsExist(FilePath))
+            {
+                fileManager.SaveText(Text, FilePath);
+                OnPropertyChanged("Text");
+            }
+            else
+            {
+                Debug.WriteLine(FilePath + " error");
+            }
         }
 
         protected void OnPropertyChanged (string propName)

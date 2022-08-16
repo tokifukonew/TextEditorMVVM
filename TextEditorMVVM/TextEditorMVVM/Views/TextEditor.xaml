@@ -5,7 +5,7 @@
     <ContentPage.Content>
         <StackLayout x:Name="mainStackLayout" Spacing="8" Padding="20, 50">
             <Label Text="Мой первый текстовый редактор на Xamarin MVVM" FontSize="Medium" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="Gray" />
-            <Entry Placeholder="Путь к текстовому файлу" HorizontalTextAlignment="Center" PlaceholderColor="Gray" />
+            <Entry Text="{Binding FilePath}" Placeholder="Путь к текстовому файлу" HorizontalTextAlignment="Center" PlaceholderColor="Gray" />
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                 <Button Text="Открыть файл" BackgroundColor="DarkSeaGreen" Command="{Binding OpenFileCommand}"/>
                 <Button Text="Сохранить файл" BackgroundColor="DarkSeaGreen" Command="{Binding SaveFileCommand}"/>
@@ -19,7 +19,7 @@
                     </Switch.Behaviors>
                 </Switch>
             </StackLayout>
-            <Editor x:Name="editor" IsReadOnly="{Binding IsReadOnly}" Placeholder="Откройте файл..." HeightRequest="200"/>
+            <Editor x:Name="editor" Text="{Binding Text}" IsReadOnly="{Binding IsReadOnly}" Placeholder="Откройте файл..." HeightRequest="200"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

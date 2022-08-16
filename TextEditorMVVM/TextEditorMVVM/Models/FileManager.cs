@@ -17,20 +17,20 @@ namespace TextEditorMVVM.Models
             return File.Exists(filePath);
         }
 
-        //public string GetText(string filePath)
-        //{
-        //    return GetText(filePath, _defaultEncoding);
-        //}
+        public string GetText(string filePath)
+        {
+            return File.ReadAllText(filePath);
+        }
         public string GetText(string filePath, Encoding encoding)
         {
             string text = File.ReadAllText(filePath, encoding);
             return text;
         }
 
-        //public void SaveText(string text, string filePath)
-        //{
-        //    SaveText(text, filePath, _defaultEncoding);
-        //}
+        public void SaveText(string text, string filePath)
+        {
+            File.WriteAllText(filePath, text);
+        }
         public void SaveText(string text, string filePath, Encoding encoding)
         {
             File.WriteAllText(filePath, text, encoding);
