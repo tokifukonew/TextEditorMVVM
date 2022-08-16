@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:TextEditorMVVM.Classes"
+             x:Class="TextEditorMVVM.Views.TextEditor">
+    <ContentPage.Content>
+        <StackLayout x:Name="mainStackLayout" Spacing="8" Padding="20, 50">
+            <Label Text="Мой первый текстовый редактор на Xamarin MVVM" FontSize="Medium" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="Gray" />
+            <Entry Placeholder="Путь к текстовому файлу" HorizontalTextAlignment="Center" PlaceholderColor="Gray" />
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                <Button Text="Открыть файл" BackgroundColor="DarkSeaGreen" Command="{Binding OpenFileCommand}"/>
+                <Button Text="Сохранить файл" BackgroundColor="DarkSeaGreen" Command="{Binding SaveFileCommand}"/>
+                <Button Text="Закрыть файл" BackgroundColor="DarkSeaGreen" Command="{Binding CloseFileCommand}"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                <Label Text="Редактирование: " VerticalOptions="Center"/>
+                <Switch>
+                    <Switch.Behaviors>
+                        <local:SwitchBehavior Command="{Binding ExecuteSwitchCommand}"/>
+                    </Switch.Behaviors>
+                </Switch>
+            </StackLayout>
+            <Editor Placeholder="Откройте файл..." HeightRequest="200"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
