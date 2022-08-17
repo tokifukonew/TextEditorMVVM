@@ -12,6 +12,7 @@ namespace TextEditorMVVM.ViewModels
     public class TextEditorViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public Action DisplayMessage;
 
         public ICommand OpenFileCommand { get; }
         public ICommand CloseFileCommand { get; }
@@ -103,17 +104,25 @@ namespace TextEditorMVVM.ViewModels
                 Debug.WriteLine("Close File. Incorrect");
             }
         }
-        public void SaveFile()
+        public async void SaveFile()
         {
-            if (!fileManager.IsExist(FilePath))
+            if(fileManager.IsExist(FilePath))
             {
-                fileManager.SaveText(Text, FilePath);
-                OnPropertyChanged("Text");
+                bool resulatOverwrittenText = await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " уже существует. Перезаписать файл?", "Да", "Нет");
+                if (resulatOverwrittenText)
+                {
+                    fileManager.SaveText(Text, FilePath);
+                    await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " перезаписан", "Ок");
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " не перезаписан", "Ок");
+                }
             }
             else
             {
                 fileManager.SaveText(Text, FilePath);
-                Debug.WriteLine(FilePath + " owerwritten");
+                await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " сохранен", "Ок");
             }
         }
 

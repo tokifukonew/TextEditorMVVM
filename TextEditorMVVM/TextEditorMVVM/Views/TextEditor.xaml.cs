@@ -70,11 +70,17 @@ namespace TextEditorMVVM.Views
             //Content = stackLayout;
 
             #endregion
+
+            var vm = new TextEditorViewModel();
+            this.BindingContext = vm;
+            vm.IsReadOnly = "True";
+            //vm.DisplayMessage += () => DisplayAlert("Success", "You", "OK");
             //Debug.WriteLine("Debug!");
             InitializeComponent();
-            this.BindingContext = new TextEditorViewModel{
-                IsReadOnly = "True"
-            };
+            //this.BindingContext = new TextEditorViewModel{
+            //    IsReadOnly = "True"
+            //};
+            //this.DisplayMessage += () => DisplayAlert("Success", "Your data are saved", "OK");
         }
 
         private void EditorTextChanged(object sender, TextChangedEventArgs e)
