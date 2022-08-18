@@ -20,6 +20,13 @@
                 </Switch>
             </StackLayout>
             <Editor x:Name="editor" Text="{Binding Text}" IsReadOnly="{Binding IsReadOnly}" Placeholder="Откройте файл..." HeightRequest="200"/>
+            <StackLayout x:Name="Info" Orientation="Horizontal" HorizontalOptions="Start" Spacing="20">
+                <Label Text="Число символов:"/>
+                <Label Text="{Binding SymbolsCount}"/>
+                <Label Text="Число слов:"/>
+                <Label Text="{Binding WordsCount}"/>
+                <Label Text="{Binding NeedSaveFile}"/>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

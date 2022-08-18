@@ -1,9 +1,8 @@
-.vs/
-TextEditorMVVM/TextEditorMVVM/bin
-TextEditorMVVM/TextEditorMVVM/obj
-TextEditorMVVM/TextEditorMVVM.Android/bin
-TextEditorMVVM/TextEditorMVVM.Android/obj
-TextEditorMVVM/TextEditorMVVM.iOS/bin
-TextEditorMVVM/TextEditorMVVM.iOS/obj
-TextEditorMVVM/TextEditorMVVM.UWP/bin
-TextEditorMVVM/TextEditorMVVM.UWP/obj
+/.vs
+
+**/bin
+**/obj
+
+.vs/TextEditorMVVM/v17/.suo
+*.v2
+.vs/TextEditorMVVM/v17/.suo

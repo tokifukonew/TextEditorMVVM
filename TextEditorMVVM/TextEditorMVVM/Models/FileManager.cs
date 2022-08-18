@@ -2,6 +2,8 @@
 using System.IO;
 using System.Text;
 using System.Diagnostics;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace TextEditorMVVM.Models
 {
@@ -11,7 +13,8 @@ namespace TextEditorMVVM.Models
         public string FilePath { get; set; }
 
         public string IsReadOnly { get; set; }
-        Stream Stream { get; set; }
+        public int SymbolsCount { get ; set; }
+        public int WordsCount { get ; set; }
 
         //public Encoding Encoding { get; set; }
         //private readonly Encoding _defaultEncoding = CodePagesEncodingProvider.Instance.GetEncoding(1251);
@@ -45,7 +48,27 @@ namespace TextEditorMVVM.Models
 
         public int GetSymbolsCount(string text)
         {
-            return text.Length;
+            if (text == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return text.Length;
+            }
+        }
+
+        public int GetWordsCount(string text)
+        {
+            if (text == null)
+            {
+                return 0;
+            }
+            else
+            {
+                var words = Regex.Matches(text, @"[a-zA-Z]+");
+                return words.Count;
+            }
         }
     }
 }

@@ -106,30 +106,70 @@ namespace TextEditorMVVM.ViewModels
         }
         public async void SaveFile()
         {
-            if(fileManager.IsExist(FilePath))
+            if (FilePath != null)
             {
-                bool resulatOverwrittenText = await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " уже существует. Перезаписать файл?", "Да", "Нет");
-                if (resulatOverwrittenText)
+                if (fileManager.IsExist(FilePath))
                 {
-                    fileManager.SaveText(Text, FilePath);
-                    await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " перезаписан", "Ок");
+                    bool resulatOverwrittenText = await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " уже существует. Перезаписать файл?", "Да", "Нет");
+                    if (resulatOverwrittenText)
+                    {
+                        fileManager.SaveText(Text, FilePath);
+                        await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " перезаписан", "Ок");
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " не перезаписан", "Ок");
+                    }
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " не перезаписан", "Ок");
+                    fileManager.SaveText(Text, FilePath);
+                    await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " сохранен", "Ок");
                 }
             }
             else
             {
-                fileManager.SaveText(Text, FilePath);
-                await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " сохранен", "Ок");
+                await Application.Current.MainPage.DisplayAlert("Внимание!", "Введено неккоретное имя файла: " + FilePath, "Ок");
             }
         }
 
-        protected void OnPropertyChanged (string propName)
+        public int SymbolsCount
+        {
+            get { return fileManager.GetSymbolsCount(fileManager.Text); }
+            set
+            {
+                if (fileManager.SymbolsCount != value)
+                {
+                    fileManager.SymbolsCount = value;
+                    OnPropertyChanged("SymbolsCount");
+                }
+            }
+        }
+
+        public int WordsCount
+        {
+            get { return fileManager.GetWordsCount(fileManager.Text); }
+            set
+            {
+                if (fileManager.WordsCount != value)
+                {
+                    fileManager.WordsCount = value;
+                    OnPropertyChanged("WordsCount");
+                }
+            }
+        }
+
+        protected void OnPropertyChanged(string propName)
         {
             if (PropertyChanged != null)
+            {
+                if (propName == "Text")
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs("SymbolsCount"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("WordsCount"));
+                }
                 PropertyChanged(this, new PropertyChangedEventArgs(propName));
+            }
         }
     }
 }
