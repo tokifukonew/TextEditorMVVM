@@ -10,6 +10,7 @@
                 <Button Text="Открыть файл" BackgroundColor="DarkSeaGreen" Command="{Binding OpenFileCommand}"/>
                 <Button Text="Сохранить файл" BackgroundColor="DarkSeaGreen" Command="{Binding SaveFileCommand}"/>
                 <Button Text="Закрыть файл" BackgroundColor="DarkSeaGreen" Command="{Binding CloseFileCommand}"/>
+                <Button Text="Выбрать файл" BackgroundColor="DarkSeaGreen" Command="{Binding SelectFileCommand}"/>
             </StackLayout>
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                 <Label Text="Редактирование: " VerticalOptions="Center"/>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TextEditorMVVM.Views.SelectFile">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label x:Name="LabelFile" Text="Выберите файл" FontSize="Large" HorizontalOptions="Center"/>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Выбранный файл:" FontSize="Medium"/>
+                <Label Text="{Binding FileName}"/>
+            </StackLayout>
+            <Button Text="Обновить список" Command="{Binding RefreshCommand}"/>
+            <ListView x:Name="FilesList" ItemsSource="{Binding Files}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Value}}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Button x:Name="Select" Text="Выбрать" Command="{Binding SelectCommand}"></Button>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

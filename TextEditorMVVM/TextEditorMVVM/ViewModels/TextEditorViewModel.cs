@@ -2,10 +2,8 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Input;
-using TextEditorMVVM.Models;
-using TextEditorMVVM.Classes;
 using Xamarin.Forms;
-using System.Text;
+using TextEditorMVVM.Views;
 
 namespace TextEditorMVVM.ViewModels
 {
@@ -18,26 +16,30 @@ namespace TextEditorMVVM.ViewModels
         public ICommand CloseFileCommand { get; }
         public ICommand SaveFileCommand { get; }
         public ICommand SwitchCommand { get; }
+        public ICommand SelectFileCommand { get; }
+        public INavigation Navigation { get; set; }
 
-        private FileManager fileManager;
+        private Models.TextEditor textEditor;
 
         public TextEditorViewModel()
         {
-            fileManager = new FileManager();
+            textEditor = new Models.TextEditor();
             OpenFileCommand = new Command(OpenFile);
             CloseFileCommand = new Command(CloseFile);
             SaveFileCommand = new Command(SaveFile);
             SwitchCommand = new Command(Switch);
+            SelectFileCommand = new Command(Select);
+            IsReadOnly = "False";
         }
-
+        
         public string IsReadOnly
         {
-            get { return fileManager.IsReadOnly; }
+            get { return textEditor.IsReadOnly; }
             set
             {
-                if (fileManager.IsReadOnly != value)
+                if (textEditor.IsReadOnly != value)
                 {
-                    fileManager.IsReadOnly = value;
+                    textEditor.IsReadOnly = value;
                     OnPropertyChanged("IsReadOnly");
                 }
             }
@@ -45,12 +47,12 @@ namespace TextEditorMVVM.ViewModels
 
         public string Text
         {
-            get { return fileManager.Text; }
+            get { return textEditor.Text; }
             set
             {
-                if (fileManager.Text != value)
+                if (textEditor.Text != value)
                 {
-                    fileManager.Text = value;
+                    textEditor.Text = value;
                     OnPropertyChanged("Text");
                     Debug.WriteLine("Change Text...");
                 }
@@ -58,12 +60,12 @@ namespace TextEditorMVVM.ViewModels
         }
         public string FilePath
         {
-            get { return fileManager.FilePath; }
+            get { return textEditor.FilePath; }
             set
             {
-                if (fileManager.FilePath != value)
+                if (textEditor.FilePath != value)
                 {
-                    fileManager.FilePath = value;
+                    textEditor.FilePath = value;
                     OnPropertyChanged("FilePath");
                 }
             }
@@ -83,9 +85,9 @@ namespace TextEditorMVVM.ViewModels
 
         public void OpenFile()
         {
-            if (fileManager.IsExist(FilePath))
+            if (textEditor.IsExist(FilePath))
             {
-                Text = fileManager.GetText(FilePath);
+                Text = textEditor.GetText(FilePath);
                 OnPropertyChanged("Text");
             }
             else
@@ -108,12 +110,12 @@ namespace TextEditorMVVM.ViewModels
         {
             if (FilePath != null)
             {
-                if (fileManager.IsExist(FilePath))
+                if (textEditor.IsExist(FilePath))
                 {
                     bool resulatOverwrittenText = await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " уже существует. Перезаписать файл?", "Да", "Нет");
                     if (resulatOverwrittenText)
                     {
-                        fileManager.SaveText(Text, FilePath);
+                        textEditor.SaveText(Text, FilePath);
                         await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " перезаписан", "Ок");
                     }
                     else
@@ -123,7 +125,7 @@ namespace TextEditorMVVM.ViewModels
                 }
                 else
                 {
-                    fileManager.SaveText(Text, FilePath);
+                    textEditor.SaveText(Text, FilePath);
                     await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " сохранен", "Ок");
                 }
             }
@@ -135,12 +137,12 @@ namespace TextEditorMVVM.ViewModels
 
         public int SymbolsCount
         {
-            get { return fileManager.GetSymbolsCount(fileManager.Text); }
+            get { return textEditor.GetSymbolsCount(textEditor.Text); }
             set
             {
-                if (fileManager.SymbolsCount != value)
+                if (textEditor.SymbolsCount != value)
                 {
-                    fileManager.SymbolsCount = value;
+                    textEditor.SymbolsCount = value;
                     OnPropertyChanged("SymbolsCount");
                 }
             }
@@ -148,15 +150,21 @@ namespace TextEditorMVVM.ViewModels
 
         public int WordsCount
         {
-            get { return fileManager.GetWordsCount(fileManager.Text); }
+            get { return textEditor.GetWordsCount(textEditor.Text); }
             set
             {
-                if (fileManager.WordsCount != value)
+                if (textEditor.WordsCount != value)
                 {
-                    fileManager.WordsCount = value;
+                    textEditor.WordsCount = value;
                     OnPropertyChanged("WordsCount");
                 }
             }
+        }
+
+        public void Select()
+        {
+            Debug.WriteLine("Select");
+            Navigation.PushAsync(new SelectFile());
         }
 
         protected void OnPropertyChanged(string propName)

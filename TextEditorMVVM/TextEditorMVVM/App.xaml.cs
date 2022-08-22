@@ -1,7 +1,5 @@
-﻿using System;
-using TextEditorMVVM.Views;
+﻿using TextEditorMVVM.Views;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace TextEditorMVVM
 {
@@ -10,8 +8,8 @@ namespace TextEditorMVVM
         public App()
         {
             InitializeComponent();
-            MainPage = new TextEditor();
-            //MainPage = new MainPage();
+            MainPage = new NavigationPage(new TextEditor());
+            //MainPage = new TextEditor();
         }
 
         protected override void OnStart()

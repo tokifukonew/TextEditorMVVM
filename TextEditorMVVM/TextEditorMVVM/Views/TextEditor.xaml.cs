@@ -1,7 +1,4 @@
-﻿using System;
-//using System.Diagnostics;
-using TextEditorMVVM.Classes;
-using TextEditorMVVM.ViewModels;
+﻿using TextEditorMVVM.ViewModels;
 using Xamarin.Forms;
 
 namespace TextEditorMVVM.Views
@@ -71,22 +68,14 @@ namespace TextEditorMVVM.Views
 
             #endregion
 
-            var vm = new TextEditorViewModel();
-            this.BindingContext = vm;
-            vm.IsReadOnly = "True";
+            //var vm = new TextEditorViewModel();
+            //this.BindingContext = vm;
+            //vm.IsReadOnly = "True";
             //vm.DisplayMessage += () => DisplayAlert("Success", "You", "OK");
             //Debug.WriteLine("Debug!");
             InitializeComponent();
-            //this.BindingContext = new TextEditorViewModel{
-            //    IsReadOnly = "True"
-            //};
-            //this.DisplayMessage += () => DisplayAlert("Success", "Your data are saved", "OK");
-        }
-
-        private void EditorTextChanged(object sender, TextChangedEventArgs e)
-        {
-
-            //Debug.WriteLine("EditorTextChanged");
+            //BindingContext = vm.Navigation;
+            BindingContext = new TextEditorViewModel() { Navigation = this.Navigation };
         }
     }
 }
