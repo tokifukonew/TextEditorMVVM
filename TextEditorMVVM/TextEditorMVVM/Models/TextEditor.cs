@@ -40,7 +40,6 @@ namespace TextEditorMVVM.Models
         {
             string fileName = Path.Combine(folderPath, filePath + ".txt");
             File.WriteAllText(fileName, text);
-            //File.WriteAllText(fileName, text);
         }
         public void SaveText(string text, string filePath, Encoding encoding)
         {

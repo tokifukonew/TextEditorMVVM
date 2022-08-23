@@ -164,7 +164,7 @@ namespace TextEditorMVVM.ViewModels
         public void Select()
         {
             Debug.WriteLine("Select");
-            Navigation.PushAsync(new SelectFile());
+            Navigation.PushModalAsync(new SelectFile());
         }
 
         protected void OnPropertyChanged(string propName)

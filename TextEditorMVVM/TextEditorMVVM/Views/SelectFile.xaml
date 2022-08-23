@@ -3,14 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TextEditorMVVM.Views.SelectFile">
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout x:Name="fileManagerStackLayout" Spacing="8" Padding="20, 50">
             <Label x:Name="LabelFile" Text="Выберите файл" FontSize="Large" HorizontalOptions="Center"/>
             <StackLayout Orientation="Horizontal">
                 <Label Text="Выбранный файл:" FontSize="Medium"/>
-                <Label Text="{Binding FileName}"/>
+                <Label Text="{Binding SelectItem}" FontSize="Medium" />
             </StackLayout>
             <Button Text="Обновить список" Command="{Binding RefreshCommand}"/>
-            <ListView x:Name="FilesList" ItemsSource="{Binding Files}">
+            <ListView x:Name="FilesList" ItemsSource="{Binding Files}" SelectedItem="{Binding SelectItem, Mode=TwoWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextCell Text="{Binding Value}}"/>

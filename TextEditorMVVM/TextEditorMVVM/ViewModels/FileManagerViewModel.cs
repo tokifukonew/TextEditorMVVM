@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using static TextEditorMVVM.Models.FileManager;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TextEditorMVVM.ViewModels
 {
@@ -16,6 +17,7 @@ namespace TextEditorMVVM.ViewModels
         //public IEnumerable<string> FilesList { get; set; }
         private string _file;
         private Models.FileManager _fileManager;
+        //public ObservableCollection<File> _files;
         public ObservableCollection<File> Files { get; set; }
 
         public FileManagerViewModel()
@@ -27,6 +29,17 @@ namespace TextEditorMVVM.ViewModels
             Refresh();
         }
 
+        private File _selectItem;
+        public File SelectItem
+        {
+            get { return _selectItem; }
+            set 
+            { 
+                _selectItem = value;
+                OnPropertyChanged("SelectItem");
+            }
+        }
+
         public string File
         {
             get { return _file; }
@@ -36,7 +49,7 @@ namespace TextEditorMVVM.ViewModels
                 OnPropertyChanged("File");
                 Files.Add(new Models.FileManager.File(){ Value = _file });
             }
-        }
+    }
 
         public void Refresh()
         {
@@ -44,7 +57,14 @@ namespace TextEditorMVVM.ViewModels
             IEnumerable<string> files = _fileManager.GetFilesList();
             foreach (var file in files)
             {
-                File = file;
+                if (Files.Count == 0)
+                {
+                    File = file;
+                }
+                else if (!Files.Any(p => p.Value == file))
+                {
+                    File = file;
+                }
             }
         }
         private void Select()
