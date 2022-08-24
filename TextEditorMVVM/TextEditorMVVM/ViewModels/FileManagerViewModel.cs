@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using static TextEditorMVVM.Models.FileManager;
 using System.Collections.Generic;
 using System.Linq;
+using TextEditorMVVM.Views;
 
 namespace TextEditorMVVM.ViewModels
 {
@@ -14,10 +15,9 @@ namespace TextEditorMVVM.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         public ICommand SelectCommand { get; }
         public ICommand RefreshCommand { get; set; }
-        //public IEnumerable<string> FilesList { get; set; }
+        //public INavigation Navigation { get; set; }
         private string _file;
         private Models.FileManager _fileManager;
-        //public ObservableCollection<File> _files;
         public ObservableCollection<File> Files { get; set; }
 
         public FileManagerViewModel()
@@ -67,9 +67,14 @@ namespace TextEditorMVVM.ViewModels
                 }
             }
         }
-        private void Select()
+        private async void Select()
         {
-            Debug.WriteLine("Select");
+            if(SelectItem != null)
+            {
+                _fileManager.FileName = SelectItem.Value;
+                Debug.WriteLine(_fileManager.FileName);
+            }
+            await App.Current.MainPage.Navigation.PopAsync();
         }
 
         protected void OnPropertyChanged(string propName)

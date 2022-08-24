@@ -161,10 +161,9 @@ namespace TextEditorMVVM.ViewModels
             }
         }
 
-        public void Select()
+        public async void Select()
         {
-            Debug.WriteLine("Select");
-            Navigation.PushModalAsync(new SelectFile());
+            await Navigation.PushAsync(new SelectFile());
         }
 
         protected void OnPropertyChanged(string propName)

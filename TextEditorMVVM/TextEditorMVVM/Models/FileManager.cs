@@ -8,8 +8,7 @@ namespace TextEditorMVVM.Models
 {
     public class FileManager
     {
-        //public IEnumerable<string> FilesList { get; set; }
-
+        public string FileName;
         private string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
         public IEnumerable<string> GetFilesList()
