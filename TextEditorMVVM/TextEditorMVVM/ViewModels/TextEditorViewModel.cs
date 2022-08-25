@@ -12,7 +12,6 @@ namespace TextEditorMVVM.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         public Action DisplayMessage;
 
-        public ICommand OpenFileCommand { get; }
         public ICommand CloseFileCommand { get; }
         public ICommand SaveFileCommand { get; }
         public ICommand SwitchCommand { get; }
@@ -24,12 +23,17 @@ namespace TextEditorMVVM.ViewModels
         public TextEditorViewModel()
         {
             textEditor = new Models.TextEditor();
-            OpenFileCommand = new Command(OpenFile);
             CloseFileCommand = new Command(CloseFile);
             SaveFileCommand = new Command(SaveFile);
             SwitchCommand = new Command(Switch);
             SelectFileCommand = new Command(Select);
             IsReadOnly = "False";
+            MessagingCenter.Subscribe<Application, string>(Application.Current, "SelectItem", (sender, arg) =>
+            {
+                FilePath = arg;
+                OpenFile();
+                Debug.WriteLine(arg);
+            });
         }
         
         public string IsReadOnly

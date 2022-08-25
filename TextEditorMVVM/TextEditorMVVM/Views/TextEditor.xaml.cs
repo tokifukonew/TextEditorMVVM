@@ -67,15 +67,12 @@ namespace TextEditorMVVM.Views
             //Content = stackLayout;
 
             #endregion
-
-            //var vm = new TextEditorViewModel();
-            //this.BindingContext = vm;
-            //vm.IsReadOnly = "True";
-            //vm.DisplayMessage += () => DisplayAlert("Success", "You", "OK");
-            //Debug.WriteLine("Debug!");
             InitializeComponent();
-            //BindingContext = vm.Navigation;
-            BindingContext = new TextEditorViewModel() { Navigation = this.Navigation };
+            BindingContext = new TextEditorViewModel() 
+            { 
+                IsReadOnly = "False",
+                Navigation = this.Navigation 
+            };
         }
     }
 }

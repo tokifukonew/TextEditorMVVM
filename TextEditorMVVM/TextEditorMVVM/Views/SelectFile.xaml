@@ -3,21 +3,38 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TextEditorMVVM.Views.SelectFile">
     <ContentPage.Content>
-        <StackLayout x:Name="fileManagerStackLayout" Spacing="8" Padding="20, 50">
+        <StackLayout x:Name="fileManagerStackLayout" Spacing="8" Padding="20, 20">
             <Label x:Name="LabelFile" Text="Выберите файл" FontSize="Large" HorizontalOptions="Center"/>
-            <StackLayout Orientation="Horizontal">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                 <Label Text="Выбранный файл:" FontSize="Medium"/>
                 <Label Text="{Binding SelectItem}" FontSize="Medium" />
             </StackLayout>
-            <Button Text="Обновить список" Command="{Binding RefreshCommand}"/>
+            <StackLayout HorizontalOptions ="Center">
+                <Button Text="Обновить список" BackgroundColor="DarkSeaGreen" Command="{Binding RefreshCommand}" WidthRequest="316"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" HorizontalOptions ="Center">
+                <Button Text="Создать" BackgroundColor="DarkSeaGreen" Command="{Binding CreateCommand}" WidthRequest="100"/>
+                <Button Text="Переименовать" BackgroundColor="DarkSeaGreen" Command="{Binding RenameCommand}" WidthRequest="100"/>
+                <Button Text="Удалить" BackgroundColor="DarkSeaGreen" Command="{Binding DeleteCommand}" WidthRequest="100"/>
+            </StackLayout>
             <ListView x:Name="FilesList" ItemsSource="{Binding Files}" SelectedItem="{Binding SelectItem, Mode=TwoWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding Value}}"/>
+                        <ViewCell>
+                            <ViewCell.View>
+                                <StackLayout>
+                                    <Label Text="{Binding Value}" FontSize="Medium"/>
+                                    <StackLayout Orientation="Vertical">
+                                        <Label Text="{Binding Size, StringFormat='Размер: {0}'}" FontSize="Small"/>
+                                        <Label Text="{Binding Change, StringFormat='Дата последнего изменения: {0}'}" FontSize="Small"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </ViewCell.View>
+                        </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button x:Name="Select" Text="Выбрать" Command="{Binding SelectCommand}"></Button>
+            <Button x:Name="Select" Text="Выбрать" BackgroundColor="DarkSeaGreen" Command="{Binding SelectCommand}"></Button>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

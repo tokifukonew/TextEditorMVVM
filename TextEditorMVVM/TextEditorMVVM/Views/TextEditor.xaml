@@ -3,18 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:TextEditorMVVM.Classes"
              x:Class="TextEditorMVVM.Views.TextEditor">
     <ContentPage.Content>
-        <StackLayout x:Name="mainStackLayout" Spacing="8" Padding="20, 50">
-            <Label Text="Мой первый текстовый редактор на Xamarin MVVM" FontSize="Medium" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="Gray" />
+        <StackLayout x:Name="mainStackLayout" Spacing="8" Padding="20, 20">
+            <Label Text="Записная книжка" FontSize="Medium" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="Gray" />
             <Entry Text="{Binding FilePath}" Placeholder="Путь к текстовому файлу" HorizontalTextAlignment="Center" PlaceholderColor="Gray" />
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                <Button Text="Открыть файл" BackgroundColor="DarkSeaGreen" Command="{Binding OpenFileCommand}"/>
-                <Button Text="Сохранить файл" BackgroundColor="DarkSeaGreen" Command="{Binding SaveFileCommand}"/>
-                <Button Text="Закрыть файл" BackgroundColor="DarkSeaGreen" Command="{Binding CloseFileCommand}"/>
-                <Button Text="Выбрать файл" BackgroundColor="DarkSeaGreen" Command="{Binding SelectFileCommand}"/>
+                <Button Text="Сохранить" BackgroundColor="DarkSeaGreen" Command="{Binding SaveFileCommand}" WidthRequest="100"/>
+                <Button Text="Закрыть" BackgroundColor="DarkSeaGreen" Command="{Binding CloseFileCommand}" WidthRequest="100" />
+                <Button Text="Выбрать" BackgroundColor="DarkSeaGreen" Command="{Binding SelectFileCommand}" WidthRequest="100"/>
             </StackLayout>
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                 <Label Text="Редактирование: " VerticalOptions="Center"/>
-                <Switch>
+                <Switch IsToggled="True">
                     <Switch.Behaviors>
                         <local:SwitchBehavior Command="{Binding SwitchCommand}"/>
                     </Switch.Behaviors>

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Diagnostics;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace TextEditorMVVM.Models
@@ -22,13 +20,13 @@ namespace TextEditorMVVM.Models
 
         public bool IsExist(string filePath)
         {
-            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), filePath + ".txt");
+            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), filePath);
             return File.Exists(fileName);
         }
 
         public string GetText(string filePath)
         {
-            string fileName = Path.Combine(folderPath, filePath + ".txt");
+            string fileName = Path.Combine(folderPath, filePath);
             return File.ReadAllText(fileName);
         }
         public string GetText(string filePath, Encoding encoding)
@@ -38,7 +36,7 @@ namespace TextEditorMVVM.Models
         }
         public void SaveText(string text, string filePath)
         {
-            string fileName = Path.Combine(folderPath, filePath + ".txt");
+            string fileName = Path.Combine(folderPath, filePath);
             File.WriteAllText(fileName, text);
         }
         public void SaveText(string text, string filePath, Encoding encoding)
