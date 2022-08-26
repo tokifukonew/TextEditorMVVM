@@ -68,9 +68,10 @@ namespace TextEditorMVVM.Views
 
             #endregion
             InitializeComponent();
-            BindingContext = new TextEditorViewModel() 
-            { 
+            BindingContext = new TextEditorViewModel()
+            {
                 IsReadOnly = "False",
+                FileName = "Новый документ",
                 Navigation = this.Navigation 
             };
         }

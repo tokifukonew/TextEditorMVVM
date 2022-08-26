@@ -11,6 +11,11 @@ namespace TextEditorMVVM.Models
     public class FileManager
     {
         private string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        private string _errorRenameFileString = "Ошибка создания файла";
+        private string _errorCreateFileString = "Ошибка создания файла";
+        private string _errorDeleteFileString = "Ошибка удаления файла";
+        private string _OKstring = "OK";
+
 
         public IEnumerable<string> GetFilesList()
         {
@@ -47,12 +52,12 @@ namespace TextEditorMVVM.Models
             }
             catch (PathTooLongException ex)
             {
-                Application.Current.MainPage.DisplayAlert("Ошибка создания файла", "Слишком длинное имя файла " + ex.Message, "OK");
+                Application.Current.MainPage.DisplayAlert(_errorCreateFileString, "Слишком длинное имя файла " + ex.Message, _OKstring);
                 result = false;
             }
             catch (Exception ex)
             {
-                Application.Current.MainPage.DisplayAlert("Ошибка создания файла", ex.Message, "OK");
+                Application.Current.MainPage.DisplayAlert(_errorCreateFileString, ex.Message, _OKstring);
                 result = false;
             }
             return Task.FromResult(result);
@@ -68,17 +73,17 @@ namespace TextEditorMVVM.Models
             }
             catch (IOException ex)
             {
-                Application.Current.MainPage.DisplayAlert("Ошибка удаления файла", "Файл используется " + ex.Message, "OK");
+                Application.Current.MainPage.DisplayAlert(_errorDeleteFileString, "Файл используется " + ex.Message, _OKstring);
                 result = false;
             }
             catch (UnauthorizedAccessException ex)
             {
-                Application.Current.MainPage.DisplayAlert("Ошибка удаления файла", "Ошибка прав доступа " + ex.Message, "OK");
+                Application.Current.MainPage.DisplayAlert(_errorDeleteFileString, "Ошибка прав доступа " + ex.Message, _OKstring);
                 result = false; 
             }
             catch (Exception ex)
             {
-                Application.Current.MainPage.DisplayAlert("Ошибка удаления файла", ex.Message, "OK");
+                Application.Current.MainPage.DisplayAlert(_errorDeleteFileString, ex.Message, _OKstring);
                 result = false;
             }
             return Task.FromResult(result);
@@ -95,17 +100,17 @@ namespace TextEditorMVVM.Models
             }
             catch (IOException ex)
             {
-                Application.Current.MainPage.DisplayAlert("Ошибка", "Файл уже существует " + ex.Message, "OK");
+                Application.Current.MainPage.DisplayAlert(_errorRenameFileString, "Файл уже существует " + ex.Message, _OKstring);
                 result = false;
             }
             catch (UnauthorizedAccessException ex)
             {
-                Application.Current.MainPage.DisplayAlert("Ошибка переименовывания файла", "Ошибка прав доступа " + ex.Message, "OK");
+                Application.Current.MainPage.DisplayAlert(_errorRenameFileString, "Ошибка прав доступа " + ex.Message, _OKstring);
                 result = false;
             }
             catch (Exception ex)
             {
-                Application.Current.MainPage.DisplayAlert("Ошибка", ex.Message, "OK");
+                Application.Current.MainPage.DisplayAlert(_errorRenameFileString, ex.Message, _OKstring);
                 result = false;
             }
             return Task.FromResult(result);

@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Input;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using static TextEditorMVVM.Models.FileManager;
 using System.Collections.Generic;
 using System.Linq;
-using TextEditorMVVM.Views;
 
 namespace TextEditorMVVM.ViewModels
 {
@@ -18,8 +16,13 @@ namespace TextEditorMVVM.ViewModels
         public ICommand CreateCommand { get ; set; }
         public ICommand DeleteCommand { get; set; }
         public ICommand RenameCommand { get; set; }
-        private string _file;
         private Models.FileManager _fileManager;
+        private string _textFileExtension = ".txt";
+        private string _createNewFileString = "Создание нового файла";
+        private string _deleteFileString = "Удаление файла";
+        private string _renameFileString = "Переименовать файл ";
+        private string _errorString = "Ошибка.";
+        private string _OKstring = "OK";
         public ObservableCollection<File> Files { get; set; }
 
         public FileManagerViewModel()
@@ -44,7 +47,7 @@ namespace TextEditorMVVM.ViewModels
                 OnPropertyChanged("SelectItem");
             }
         }
-
+        private string _file;
         public string File
         {
             get { return _file; }
@@ -61,10 +64,13 @@ namespace TextEditorMVVM.ViewModels
 
         public void Refresh()
         {
-            Debug.WriteLine("Refresh");
             IEnumerable<string> files = _fileManager.GetFilesList();
             foreach (var file in files)
             {
+                if(file == "username.txt" || file == "temp.txt")
+                {
+                    continue;
+                }
                 if (Files.Count == 0)
                 {
                     File = file;
@@ -80,21 +86,25 @@ namespace TextEditorMVVM.ViewModels
             if (SelectItem != null)
             {
                 MessagingCenter.Send<Application, string>(Application.Current, "SelectItem", SelectItem.Value);
+                await App.Current.MainPage.Navigation.PopModalAsync();
             }
-            await App.Current.MainPage.Navigation.PopAsync();
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Выбор файла", _errorString + " Выберите файл.", _OKstring); ;
+            }
         }
 
         public async void Create()
         {
-            string fileName = await Application.Current.MainPage.DisplayPromptAsync("Создать новый файл", "Введите имя файла") + ".txt";
-            if (!_fileManager.IsExist(fileName))
+            string fileName = await Application.Current.MainPage.DisplayPromptAsync(_createNewFileString, "Введите имя нового файла") + _textFileExtension;
+            if (!_fileManager.IsExist(fileName) && fileName != _textFileExtension)
             {
                 if (fileName != null && _fileManager.IsValidfileName(fileName))
                 {
                     bool result = await _fileManager.CreateFile(fileName);
                     if(result)
                     {
-                        await Application.Current.MainPage.DisplayAlert("Файл создан!", "Файл создан " + fileName, "Ок");
+                        await Application.Current.MainPage.DisplayAlert(_createNewFileString, "Файл создан " + fileName, _OKstring);
                         File = fileName;
                         SelectItem = Files.First(p => p.Value == fileName);
                         OnPropertyChanged("SelectItem");
@@ -102,63 +112,77 @@ namespace TextEditorMVVM.ViewModels
                     }
                     else
                     {
-                        await Application.Current.MainPage.DisplayAlert("Ошибка", "Файл не создан " + fileName, "Ок");
+                        await Application.Current.MainPage.DisplayAlert(_createNewFileString, _errorString + " Файл не создан " + fileName, _OKstring);
                     }
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Ошибка", "Недопустимое имя файла " + fileName, "Ок");
+                    await Application.Current.MainPage.DisplayAlert(_createNewFileString, _errorString + " Недопустимое имя файла " + fileName, _OKstring);
                 }
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Ошибка", "Файл уже существует " + fileName, "Ок");
+                await Application.Current.MainPage.DisplayAlert(_createNewFileString, _errorString + " Файл уже существует или введено нулевое имя.", _OKstring);
             }
         }
         public async void Delete()
         {
-            if (_fileManager.IsExist(SelectItem.Value) && (SelectItem.Value != null))
+            if (SelectItem != null)
             {
-                bool result = await _fileManager.DeleteFile(SelectItem.Value);
-                if (result)
+                if (_fileManager.IsExist(SelectItem.Value))
                 {
-                    await Application.Current.MainPage.DisplayAlert("Удаление", "Выбранный файл удален " + SelectItem.Value, "OK");
+                    bool result = await _fileManager.DeleteFile(SelectItem.Value);
+                    if (result)
+                    {
+                        await Application.Current.MainPage.DisplayAlert(_deleteFileString, "Выбранный файл удален " + SelectItem.Value, _OKstring);
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert(_deleteFileString, _errorString + " Выбранный файл не удален " + SelectItem.Value, _OKstring);
+                    }
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Ошибка", "Выбранный файл не удален " + SelectItem.Value, "OK");
+                    await Application.Current.MainPage.DisplayAlert(_deleteFileString, _errorString + " Выбранный файл отсутствует " + SelectItem.Value, _OKstring);
                 }
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Ошибка удаления файла", "Выбранный файл отсутствует " + SelectItem.Value, "OK");
+                await Application.Current.MainPage.DisplayAlert(_renameFileString, _errorString + " Выберите файл.", _OKstring); ;
             }
             Files.Clear();
             Refresh();
         }
         public async void Rename()
         {
-            if (_fileManager.IsExist(SelectItem.Value) && (SelectItem.Value != null))
+            if (SelectItem != null)
             {
-                string newFileName = await Application.Current.MainPage.DisplayPromptAsync("Переименовать " + SelectItem.Value, "Введите новое имя файла ") + ".txt";
-                if (_fileManager.IsValidfileName(newFileName))
+                if (_fileManager.IsExist(SelectItem.Value) && (SelectItem.Value != null))
                 {
-                    bool result = await _fileManager.RenameFile(SelectItem.Value, newFileName);
-                    if (result)
+                    string newFileName = await Application.Current.MainPage.DisplayPromptAsync(_renameFileString + SelectItem.Value, "Введите новое имя файла ") + _textFileExtension;
+                    if (_fileManager.IsValidfileName(newFileName))
                     {
-                        await Application.Current.MainPage.DisplayAlert("Переименовать файл " + SelectItem.Value, "Файл " + SelectItem.Value + " переименован в " + newFileName, "OK");
-                        Files.Clear();
-                        Refresh();
+                        bool result = await _fileManager.RenameFile(SelectItem.Value, newFileName);
+                        if (result)
+                        {
+                            await Application.Current.MainPage.DisplayAlert(_renameFileString + SelectItem.Value, "Файл " + SelectItem.Value + " переименован в " + newFileName, _OKstring);
+                            Files.Clear();
+                            Refresh();
+                        }
+                        else
+                        {
+                            await Application.Current.MainPage.DisplayAlert(_renameFileString + SelectItem.Value, _errorString + " Выбранный файл не переименован " + SelectItem.Value, _OKstring);
+                        }
                     }
-                    else
-                    {
-                        await Application.Current.MainPage.DisplayAlert("Ошибка", "Выбранный файл не переименован " + SelectItem.Value, "OK");
-                    }
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert(_renameFileString + SelectItem.Value, _errorString + " Файл не переименован", _OKstring);
                 }
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Ошибка", "Файл не переименован", "OK");
+                await Application.Current.MainPage.DisplayAlert(_renameFileString, _errorString + " Выберите файл.", _OKstring);
             }
         }
 

@@ -8,7 +8,7 @@ namespace TextEditorMVVM.Models
     public class TextEditor
     {
         public string Text { get; set; }
-        public string FilePath { get; set; }
+        public string FileName { get; set; }
 
         public string IsReadOnly { get; set; }
         public int SymbolsCount { get ; set; }

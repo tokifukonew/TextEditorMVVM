@@ -5,36 +5,35 @@
     <ContentPage.Content>
         <StackLayout x:Name="fileManagerStackLayout" Spacing="8" Padding="20, 20">
             <Label x:Name="LabelFile" Text="Выберите файл" FontSize="Large" HorizontalOptions="Center"/>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                <Label Text="Выбранный файл:" FontSize="Medium"/>
-                <Label Text="{Binding SelectItem}" FontSize="Medium" />
-            </StackLayout>
-            <StackLayout HorizontalOptions ="Center">
-                <Button Text="Обновить список" BackgroundColor="DarkSeaGreen" Command="{Binding RefreshCommand}" WidthRequest="316"/>
-            </StackLayout>
-            <StackLayout Orientation="Horizontal" HorizontalOptions ="Center">
-                <Button Text="Создать" BackgroundColor="DarkSeaGreen" Command="{Binding CreateCommand}" WidthRequest="100"/>
-                <Button Text="Переименовать" BackgroundColor="DarkSeaGreen" Command="{Binding RenameCommand}" WidthRequest="100"/>
-                <Button Text="Удалить" BackgroundColor="DarkSeaGreen" Command="{Binding DeleteCommand}" WidthRequest="100"/>
-            </StackLayout>
-            <ListView x:Name="FilesList" ItemsSource="{Binding Files}" SelectedItem="{Binding SelectItem, Mode=TwoWay}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <ViewCell.View>
-                                <StackLayout>
-                                    <Label Text="{Binding Value}" FontSize="Medium"/>
-                                    <StackLayout Orientation="Vertical">
-                                        <Label Text="{Binding Size, StringFormat='Размер: {0}'}" FontSize="Small"/>
-                                        <Label Text="{Binding Change, StringFormat='Дата последнего изменения: {0}'}" FontSize="Small"/>
+            <StackLayout Orientation="Vertical" HorizontalOptions="Center">
+                <Label Text="{Binding SelectItem, StringFormat='Выбранный файл: {0}'}" FontSize="Medium"  HorizontalTextAlignment="Center"/>
+                <ListView x:Name="FilesList" ItemsSource="{Binding Files}" SelectedItem="{Binding SelectItem, Mode=TwoWay}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+                                    <StackLayout HorizontalOptions="Center">
+                                        <Label Text="{Binding Value}" FontSize="Medium"/>
+                                        <StackLayout Orientation="Vertical">
+                                            <Label Text="{Binding Size, StringFormat='Размер: {0}'}" FontSize="Small"/>
+                                            <Label Text="{Binding Change, StringFormat='Дата последнего изменения: {0}'}" FontSize="Small"/>
+                                        </StackLayout>
                                     </StackLayout>
-                                </StackLayout>
-                            </ViewCell.View>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <Button x:Name="Select" Text="Выбрать" BackgroundColor="DarkSeaGreen" Command="{Binding SelectCommand}"></Button>
-        </StackLayout>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center">
+                    <Button Text="Обновить список" BackgroundColor="DarkSeaGreen" Command="{Binding RefreshCommand}" WidthRequest="316"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions ="Center">
+                        <Button Text="Создать" BackgroundColor="DarkSeaGreen" Command="{Binding CreateCommand}" WidthRequest="100"/>
+                        <Button Text="Переименовать" BackgroundColor="DarkSeaGreen" Command="{Binding RenameCommand}" WidthRequest="100"/>
+                        <Button Text="Удалить" BackgroundColor="DarkSeaGreen" Command="{Binding DeleteCommand}" WidthRequest="100"/>
+                    </StackLayout>
+                    <Button Text="Выбрать" BackgroundColor="DarkSeaGreen" Command="{Binding SelectCommand}" WidthRequest="316"/>
+                </StackLayout>
+            </StackLayout>
+            </StackLayout>
     </ContentPage.Content>
 </ContentPage>

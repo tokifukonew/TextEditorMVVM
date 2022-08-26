@@ -5,7 +5,7 @@
     <ContentPage.Content>
         <StackLayout x:Name="mainStackLayout" Spacing="8" Padding="20, 20">
             <Label Text="Записная книжка" FontSize="Medium" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="Gray" />
-            <Entry Text="{Binding FilePath}" Placeholder="Путь к текстовому файлу" HorizontalTextAlignment="Center" PlaceholderColor="Gray" />
+            <Label Text="{Binding FileName}" FontSize="Medium" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="Gray"/>
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                 <Button Text="Сохранить" BackgroundColor="DarkSeaGreen" Command="{Binding SaveFileCommand}" WidthRequest="100"/>
                 <Button Text="Закрыть" BackgroundColor="DarkSeaGreen" Command="{Binding CloseFileCommand}" WidthRequest="100" />
@@ -21,11 +21,9 @@
             </StackLayout>
             <Editor x:Name="editor" Text="{Binding Text}" IsReadOnly="{Binding IsReadOnly}" Placeholder="Откройте файл..." HeightRequest="200"/>
             <StackLayout x:Name="Info" Orientation="Horizontal" HorizontalOptions="Start" Spacing="20">
-                <Label Text="Число символов:"/>
-                <Label Text="{Binding SymbolsCount}"/>
-                <Label Text="Число слов:"/>
-                <Label Text="{Binding WordsCount}"/>
-                <Label Text="{Binding NeedSaveFile}"/>
+                <Label Text="{Binding SymbolsCount, StringFormat='Число слов {0}'}"/>
+                <Label Text="{Binding WordsCount, StringFormat='Число слов {0}'}"/>
+                <Label Text="{Binding NeedSaveFile, StringFormat='Необходимо сохранить {0}'}"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

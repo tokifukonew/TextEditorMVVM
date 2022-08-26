@@ -18,11 +18,13 @@ namespace TextEditorMVVM.ViewModels
         public ICommand SelectFileCommand { get; }
         public INavigation Navigation { get; set; }
 
-        private Models.TextEditor textEditor;
-
+        private Models.TextEditor _textEditor;
+        private bool _needSave = false;
+        private string _closeFileString = "Закрытие файла ";
+        private string _OKstring = "OK";
         public TextEditorViewModel()
         {
-            textEditor = new Models.TextEditor();
+            _textEditor = new Models.TextEditor();
             CloseFileCommand = new Command(CloseFile);
             SaveFileCommand = new Command(SaveFile);
             SwitchCommand = new Command(Switch);
@@ -30,7 +32,7 @@ namespace TextEditorMVVM.ViewModels
             IsReadOnly = "False";
             MessagingCenter.Subscribe<Application, string>(Application.Current, "SelectItem", (sender, arg) =>
             {
-                FilePath = arg;
+                FileName = arg;
                 OpenFile();
                 Debug.WriteLine(arg);
             });
@@ -38,12 +40,12 @@ namespace TextEditorMVVM.ViewModels
         
         public string IsReadOnly
         {
-            get { return textEditor.IsReadOnly; }
+            get { return _textEditor.IsReadOnly; }
             set
             {
-                if (textEditor.IsReadOnly != value)
+                if (_textEditor.IsReadOnly != value)
                 {
-                    textEditor.IsReadOnly = value;
+                    _textEditor.IsReadOnly = value;
                     OnPropertyChanged("IsReadOnly");
                 }
             }
@@ -51,26 +53,26 @@ namespace TextEditorMVVM.ViewModels
 
         public string Text
         {
-            get { return textEditor.Text; }
+            get { return _textEditor.Text; }
             set
             {
-                if (textEditor.Text != value)
+                if (_textEditor.Text != value)
                 {
-                    textEditor.Text = value;
+                    _textEditor.Text = value;
                     OnPropertyChanged("Text");
                     Debug.WriteLine("Change Text...");
                 }
             }
         }
-        public string FilePath
+        public string FileName
         {
-            get { return textEditor.FilePath; }
+            get { return _textEditor.FileName; }
             set
             {
-                if (textEditor.FilePath != value)
+                if (_textEditor.FileName != value)
                 {
-                    textEditor.FilePath = value;
-                    OnPropertyChanged("FilePath");
+                    _textEditor.FileName = value;
+                    OnPropertyChanged("FileName");
                 }
             }
         }
@@ -89,64 +91,83 @@ namespace TextEditorMVVM.ViewModels
 
         public void OpenFile()
         {
-            if (textEditor.IsExist(FilePath))
+            if (_textEditor.IsExist(FileName))
             {
-                Text = textEditor.GetText(FilePath);
+                Text = _textEditor.GetText(FileName);
                 OnPropertyChanged("Text");
             }
             else
             {
-                Debug.WriteLine(FilePath + " not exist");
+
+                Debug.WriteLine(FileName + " not exist");
             }
         }
-        public void CloseFile()
+        public bool NeedSaveFile
         {
-            if (Text != null || Text != "")
+            get { return _needSave; }
+            set
             {
-                Text = null;
+                _needSave = value;
+                OnPropertyChanged("NeedSaveFile");
             }
-            else
+        }
+        public async void CloseFile()
+        {
+            if (_needSave)
             {
-                Debug.WriteLine("Close File. Incorrect");
+                bool resultCloseFile = await Application.Current.MainPage.DisplayAlert("Закрыть файл " + FileName, "Не сохранены изменения в файле. Сохранить? ", "Да", "Нет");
+                if (resultCloseFile)
+                {
+                    SaveFile();
+                }
+                else
+                {
+                    if (Text != null || Text != "")
+                    {
+                        Text = null;
+                    }
+                }
             }
+
         }
         public async void SaveFile()
         {
-            if (FilePath != null)
+            if (FileName != null)
             {
-                if (textEditor.IsExist(FilePath))
+                if (_textEditor.IsExist(FileName))
                 {
-                    bool resulatOverwrittenText = await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " уже существует. Перезаписать файл?", "Да", "Нет");
+                    bool resulatOverwrittenText = await Application.Current.MainPage.DisplayAlert(_closeFileString, FileName + " уже существует. Перезаписать файл?", "Да", "Нет");
                     if (resulatOverwrittenText)
                     {
-                        textEditor.SaveText(Text, FilePath);
-                        await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " перезаписан", "Ок");
+                        _textEditor.SaveText(Text, FileName);
+                        await Application.Current.MainPage.DisplayAlert(_closeFileString, FileName + " перезаписан", _OKstring);
+                        NeedSaveFile = false;
                     }
                     else
                     {
-                        await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " не перезаписан", "Ок");
+                        await Application.Current.MainPage.DisplayAlert(_closeFileString, FileName + " не перезаписан", _OKstring);
                     }
                 }
                 else
                 {
-                    textEditor.SaveText(Text, FilePath);
-                    await Application.Current.MainPage.DisplayAlert("Внимание!", FilePath + " сохранен", "Ок");
+                    _textEditor.SaveText(Text, FileName);
+                    await Application.Current.MainPage.DisplayAlert(_closeFileString, FileName + " сохранен", _OKstring);
                 }
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Внимание!", "Введено неккоретное имя файла: " + FilePath, "Ок");
+                await Application.Current.MainPage.DisplayAlert(_closeFileString, "Введено неккоретное имя файла: " + FileName, _OKstring);
             }
         }
 
         public int SymbolsCount
         {
-            get { return textEditor.GetSymbolsCount(textEditor.Text); }
+            get { return _textEditor.GetSymbolsCount(_textEditor.Text); }
             set
             {
-                if (textEditor.SymbolsCount != value)
+                if (_textEditor.SymbolsCount != value)
                 {
-                    textEditor.SymbolsCount = value;
+                    _textEditor.SymbolsCount = value;
                     OnPropertyChanged("SymbolsCount");
                 }
             }
@@ -154,12 +175,12 @@ namespace TextEditorMVVM.ViewModels
 
         public int WordsCount
         {
-            get { return textEditor.GetWordsCount(textEditor.Text); }
+            get { return _textEditor.GetWordsCount(_textEditor.Text); }
             set
             {
-                if (textEditor.WordsCount != value)
+                if (_textEditor.WordsCount != value)
                 {
-                    textEditor.WordsCount = value;
+                    _textEditor.WordsCount = value;
                     OnPropertyChanged("WordsCount");
                 }
             }
@@ -167,7 +188,7 @@ namespace TextEditorMVVM.ViewModels
 
         public async void Select()
         {
-            await Navigation.PushAsync(new SelectFile());
+            await Navigation.PushModalAsync(new SelectFile());
         }
 
         protected void OnPropertyChanged(string propName)
@@ -176,6 +197,7 @@ namespace TextEditorMVVM.ViewModels
             {
                 if (propName == "Text")
                 {
+                    NeedSaveFile = true;
                     PropertyChanged(this, new PropertyChangedEventArgs("SymbolsCount"));
                     PropertyChanged(this, new PropertyChangedEventArgs("WordsCount"));
                 }
