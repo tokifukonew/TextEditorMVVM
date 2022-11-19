@@ -3,28 +3,49 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:TextEditorMVVM.Classes"
              x:Class="TextEditorMVVM.Views.TextEditor">
     <ContentPage.Content>
-        <StackLayout x:Name="mainStackLayout" Spacing="8" Padding="20, 20">
-            <Label Text="Записная книжка" FontSize="Medium" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="Gray" />
-            <Label Text="{Binding FileName}" FontSize="Medium" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="Gray"/>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                <Button Text="Сохранить" BackgroundColor="DarkSeaGreen" Command="{Binding SaveFileCommand}" WidthRequest="100"/>
-                <Button Text="Закрыть" BackgroundColor="DarkSeaGreen" Command="{Binding CloseFileCommand}" WidthRequest="100" />
-                <Button Text="Выбрать" BackgroundColor="DarkSeaGreen" Command="{Binding SelectFileCommand}" WidthRequest="100"/>
-            </StackLayout>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                <Label Text="Редактирование: " VerticalOptions="Center"/>
-                <Switch IsToggled="True">
-                    <Switch.Behaviors>
-                        <local:SwitchBehavior Command="{Binding SwitchCommand}"/>
-                    </Switch.Behaviors>
-                </Switch>
-            </StackLayout>
-            <Editor x:Name="editor" Text="{Binding Text}" IsReadOnly="{Binding IsReadOnly}" Placeholder="Откройте файл..." HeightRequest="200"/>
-            <StackLayout x:Name="Info" Orientation="Horizontal" HorizontalOptions="Start" Spacing="20">
-                <Label Text="{Binding SymbolsCount, StringFormat='Число слов {0}'}"/>
-                <Label Text="{Binding WordsCount, StringFormat='Число слов {0}'}"/>
-                <Label Text="{Binding NeedSaveFile, StringFormat='Необходимо сохранить {0}'}"/>
-            </StackLayout>
+        <StackLayout x:Name="mainStackLayout" Spacing="8" Padding="10, 20, 10, 20">
+            <Grid ColumnSpacing="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="15*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Label Grid.Row="0" Grid.Column="0" Text="Записная книжка" FontSize="Medium" HorizontalOptions="Center" 
+                       HorizontalTextAlignment="Center" TextColor="Gray" />
+                <Label Grid.Row="1" Grid.Column="0" Text="{Binding FileName}" FontSize="Medium" 
+                       HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="Gray"/>
+                <StackLayout Grid.Row="2" Grid.Column="0" Spacing="10" 
+                             Orientation="Horizontal">
+                    <Button Text="Сохранить" Command="{Binding SaveFileCommand}"
+                            HorizontalOptions="FillAndExpand" BackgroundColor="DarkSeaGreen"  />
+                    <Button Text="Закрыть" Command="{Binding CloseFileCommand}"
+                            HorizontalOptions="FillAndExpand" BackgroundColor="DarkSeaGreen" />
+                    <Button Text="Выбрать" Command="{Binding SelectFileCommand}"
+                            HorizontalOptions="FillAndExpand" BackgroundColor="DarkSeaGreen" />
+                </StackLayout>
+                <StackLayout Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalOptions="Center">
+                    <Label Text="Редактирование: " VerticalOptions="Center"/>
+                    <Switch IsToggled="True">
+                        <Switch.Behaviors>
+                            <local:SwitchBehavior Command="{Binding SwitchCommand}"/>
+                        </Switch.Behaviors>
+                    </Switch>
+                </StackLayout>
+                <Editor x:Name="editor" Grid.Row="4" Grid.Column="0" AutoSize="Disabled"
+                        Text="{Binding Text}" IsReadOnly="{Binding IsReadOnly}" Placeholder="Откройте файл..."/>
+                <StackLayout x:Name="Info" Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Spacing="20" VerticalOptions="End"  HorizontalOptions="CenterAndExpand">
+                    <Label Text="{Binding SymbolsCount, StringFormat='Число слов {0}'}"/>
+                    <Label Text="{Binding WordsCount, StringFormat='Число слов {0}'}"/>
+                    <Label Text="{Binding NeedSaveFile, StringFormat='Необходимо сохранить {0}'}"/>
+                </StackLayout>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
